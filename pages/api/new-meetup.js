@@ -4,11 +4,26 @@
 // (req) The request object contains data about incoming request
 // (res) The response object will be needed for sending back a response
 
-function handler(req, res) {
+import { MongoClient } from "mongodb";
+
+async function handler(req, res) {
   if (req.method === "POST") {
     const data = req.body; // .body => The body field is another build in field wich contains the body of the incoming request, the data of the incoming request
 
-    const { title, image, address, description } = data;
+    const client = await MongoClient.connect(
+      "mongodb+srv://leonitshaqiri:niti1234@cluster0.euu47.mongodb.net/meetups?retryWrites=true&w=majority"
+    );
+    const db = client.db();
+
+    const meetupsCollection = db.collection("meetups");
+
+    const results = await meetupsCollection.insertOne(data);
+
+    console.log(results);
+
+    client.close();
+
+    res.status(201).json({ message: "Meetup inserted!" });
   }
 }
 
