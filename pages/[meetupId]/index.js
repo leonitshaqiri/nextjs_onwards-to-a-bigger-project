@@ -2,7 +2,7 @@ import { MongoClient, ObjectId } from "mongodb";
 import { Fragment } from "react";
 import Head from "next/head";
 
-import MeetupItem from "../../components/meetups/MeetupItem";
+import MeetupDetail from "../../components/meetups/MeetupDetail";
 
 function MeetupDetails(props) {
   return (
@@ -11,7 +11,7 @@ function MeetupDetails(props) {
         <title>{props.meetupData.title}</title>
         <meta name="description" content={props.meetupData.description} />
       </Head>
-      <MeetupItem
+      <MeetupDetail
         image={props.meetupData.image}
         title={props.meetupData.title}
         address={props.meetupData.address}
@@ -34,8 +34,7 @@ export async function getStaticPaths() {
   client.close();
 
   return {
-    fallback: false,
-
+    fallback: "blocking",
     paths: meetups.map((meetup) => ({
       params: { meetupId: meetup._id.toString() },
     })),
@@ -57,8 +56,6 @@ export async function getStaticProps(context) {
   const selectedMeetup = await meetupsCollection.findOne({
     _id: ObjectId(meetupId),
   });
-
-  console.log(selectedMeetup);
 
   client.close();
 
