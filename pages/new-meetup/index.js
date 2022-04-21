@@ -6,7 +6,7 @@ function NewMeetupPage() {
       method: "POST",
       body: JSON.stringify(enteredMeetupData),
       headers: {
-        "Content Type-": "application/json",
+        "Content-Type": "application/json",
       },
     });
 
